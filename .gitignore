@@ -1,6 +1,6 @@
 src/main/resources/application.properties
 target
-
+src/main/java/YourBot.java
 ### IntelliJ IDEA ###
 .idea
 *.iws
