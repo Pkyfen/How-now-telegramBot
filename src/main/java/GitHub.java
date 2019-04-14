@@ -15,22 +15,20 @@ public class GitHub {
         try{
         URL url =
                 new URL("https://api.github.com/users/"+acc+"/events/public");
-//        URL url = new URL("https://api.github.com/repos/Pkyfen/MyTrackyJava");
         Scanner in = new Scanner((InputStream) url.getContent());
         while(in.hasNext()){
             result  += in.nextLine();
         }
-//        System.out.println("Получил "+ result+"\n\n\n");
 
         JSONArray array = new JSONArray(result);
-//        System.out.println("Преобразовал "+array);
         for(int i = 0 ; i < 5; i++){
             JSONObject object = array.getJSONObject(i);
-            model.setType(object.getString("type"));
             JSONObject repo = object.getJSONObject("repo");
+            JSONObject actor = object.getJSONObject("actor");
+
+            model.setType(object.getString("type"));
             model.setUrl(getHttpUrl(repo.getString("url")));
             model.setRepo(repo.getString("name"));
-            JSONObject actor = object.getJSONObject("actor");
             model.setLogin(actor.getString("login"));
             try{
                 JSONArray commits = object.getJSONObject("payload").getJSONArray("commits");
@@ -42,9 +40,8 @@ public class GitHub {
             }
             model.setDate(object.getString("created_at"));
 //
-           answer+=(
-                   "__"+(i+1)+") "+
-                    "Действие " + model.getType()+ "__\n    "+
+           answer+=("_"+(i+1)+") "+
+                    "Действие " + model.getType()+ "_\n    "+
                            model.getDate()+"\n    "+
                      "Комментарий " + model.getCommit()+"\n    "+
                     "В репозитории ["+ model.getRepo()+ "]("+ model.getUrl()+")\n\n");

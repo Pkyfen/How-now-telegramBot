@@ -4,7 +4,6 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -75,7 +74,6 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                  default:
                      try{
-//                         sendMsg(message, Weather.getWeather(message.getText(),model));
                          sendMsg(message, GitHub.getUpdates(message.getText(), model));
                      } catch (IOException | ParseException e) {
                          sendMsg(message,"не смог найти такого пользователя");
