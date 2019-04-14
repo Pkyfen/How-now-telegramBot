@@ -1,0 +1,9 @@
+src/main/resources/application.properties
+target
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+/out/
