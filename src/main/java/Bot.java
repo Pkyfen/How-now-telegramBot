@@ -70,8 +70,10 @@ public class Bot extends TelegramLongPollingBot {
                     sendMsg(message, "Привет мир!\n" +
                             "Вы можете узнать последние действия пользователя в GitHub!" +
                             "\nПросто введите его логин" +
-                            "\n version: 0.0.2");
+                            "\n version: 0.0.3");
                     break;
+                case "супер":
+                    sendMsg(message, "пупер!");
                  default:
                      try{
                          sendMsg(message, GitHub.getUpdates(message.getText(), model));
@@ -87,6 +89,6 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public String getBotToken() {
-        return "${bot_token}";
+        return "710491839:AAEHZvDYMGxc_EZG3Uy1WeFKOYu3fEg7xuc";
     }
 }
