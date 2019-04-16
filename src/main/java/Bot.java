@@ -1,6 +1,4 @@
-import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -15,22 +13,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
-    public static void main(String[] args) {
-        ApiContextInitializer.init();
-        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
 
-        try{
-            telegramBotsApi.registerBot(new Bot());
-        }catch (TelegramApiException e){
-            System.out.println(e);
+    Bot(boolean newUpdate){
+        if(newUpdate) {
+           sendUpdateMessage("Новые фишечки :)");
         }
     }
 
-    public void sendMsg(Message message, String text){
+
+    public String getBotUsername() {
+        return "githuby_bot";
+    }
+
+
+
+    public String getBotToken() {
+        return "710491839:AAEHZvDYMGxc_EZG3Uy1WeFKOYu3fEg7xuc";
+    }
+
+
+    private void sendMsg(Message message, String text){
         SendMessage sendMsg = new SendMessage();
         sendMsg.enableMarkdown(true);
         sendMsg.setChatId(message.getChatId().toString());
-//        sendMsg.setReplyToMessageId(message.getMessageId());
         sendMsg.setText(text);
         try {
             setButton(sendMsg);
@@ -40,7 +45,9 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void setButton(SendMessage sendMessage){
+
+    private void setButton(SendMessage sendMessage){
+
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(keyboardMarkup);
         keyboardMarkup.setSelective(true);
@@ -58,37 +65,53 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
-    public void onUpdateReceived(Update update) {
-        GitModel model = new GitModel();
-        Message message = update.getMessage();
-        if(message != null && message.hasText()){
-            switch (message.getText()){
-                case "/help":
-                    sendMsg(message, "Введите логин пользователя\nПример: pkyfen");
-                    break;
-                case "/start":
-                    sendMsg(message, "Привет мир!\n" +
-                            "Вы можете узнать последние действия пользователя в GitHub!" +
-                            "\nПросто введите его логин" +
-                            "\n version: 0.0.3");
-                    break;
-                case "супер":
-                    sendMsg(message, "пупер!");
-                 default:
-                     try{
-                         sendMsg(message, GitHub.getUpdates(message.getText(), model));
-                     } catch (IOException | ParseException e) {
-                         sendMsg(message,"не смог найти такого пользователя");
-                     }
+    private void sendUpdateMessage(String text){
+        ArrayList<String> userId = Data.ReadId("src/main/resources/allUsers.txt");
+        for (String id : userId) {
+            SendMessage update = new SendMessage();
+            update.setText(text);
+            update.setChatId(id);
+            try {
+                execute(update);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    public String getBotUsername() {
-        return "githuby_bot";
+
+    public void onUpdateReceived(Update update) {
+        GitModel model = new GitModel();
+        Message message = update.getMessage();
+
+        if(message != null && message.hasText()){
+            switch (message.getText()){
+
+                case "/help":
+                    sendMsg(message, "Введите логин пользователя\nПример: pkyfen");
+                    break;
+
+                case "/start":
+                    Data.InputInFile("src/main/resources/allUsers.txt", String.valueOf(message.getChatId()));
+                    sendMsg(message, "Привет мир!\n" +
+                            "Вы можете узнать последние действия пользователя в GitHub!" +
+                            "\nПросто введите его логин" +
+                            "\n version: 0.0.4");
+                    break;
+
+                case "супер":
+                    sendMsg(message, "пупер!");
+                    break;
+
+                default:
+                    try{
+                        System.out.printf(message.getChat().getFirstName() + " " + message.getChat().getLastName()+ " => ");
+                        sendMsg(message, GitHub.getUpdates(message.getText(), model));
+                    } catch (IOException | ParseException e) {
+                        sendMsg(message,"не смог найти такого пользователя");
+                    }
+            }
+        }
     }
 
-    public String getBotToken() {
-        return "710491839:AAEHZvDYMGxc_EZG3Uy1WeFKOYu3fEg7xuc";
-    }
 }

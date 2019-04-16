@@ -3,10 +3,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -28,7 +26,7 @@ public class GitHub {
             JSONObject repo = object.getJSONObject("repo");
             JSONObject actor = object.getJSONObject("actor");
 
-            model.setType(rusType(object.getString("type")));
+            model.setType(object.getString("type"));
             model.setUrl(getHttpUrl(repo.getString("url")));
             model.setRepo(repo.getString("name"));
             model.setLogin(actor.getString("login"));
@@ -40,12 +38,13 @@ public class GitHub {
             catch (Exception e){
                 model.setCommit("null");
             }
+
             model.setDate(object.getString("created_at"));
 
             switch (object.getString("type")){
                 case "PushEvent":
                     answer+=("_"+(i+1)+") "+
-                            model.getType()+ "_\n    "+
+                            rusType(model.getType())+ "_\n    "+
                             "Текст: \"" + model.getCommit()+"\"\n    "+
                             "В репозитории ["+ model.getRepo()+ "]("+ model.getUrl()+")\n    "+
                             model.getDate() + "\n\n");
@@ -53,30 +52,29 @@ public class GitHub {
 
                 case"CreateEvent":
                     answer+=("_"+(i+1)+") "+
-                            model.getType()+ "_\n    "+
+                            rusType(model.getType())+ "_\n    "+
                             "["+ model.getRepo()+ "]("+ model.getUrl()+")\n    "+
                             model.getDate()+"\n\n");
                     break;
 
                 case "WatchEvent":
                     answer+=("_"+(i+1)+") "+
-                            model.getType()+ "_\n    "+
+                            rusType(model.getType())+ "_\n    "+
                             "Репозиторий "+"["+ model.getRepo()+ "]("+ model.getUrl()+")\n    "+
                             model.getDate()+"\n\n");
                     break;
 
                 case"IssueCommentEvent":
                     answer+=("_"+(i+1)+") "+
-                            model.getType()+ "_\n    "+
+                            rusType(model.getType())+ "_\n    "+
                             "В репозиторий "+"["+ model.getRepo()+ "]("+ model.getUrl()+")\n    "+
                             model.getDate()+"\n\n");
                     break;
 
                     default:answer+=("_"+(i+1)+") "+
                             "Действие " + model.getType()+ "_\n    "+
-                            model.getDate()+"\n    "+
-                            "Комментарий " + model.getCommit()+"\n    "+
-                            "В репозитории ["+ model.getRepo()+ "]("+ model.getUrl()+")\n\n");
+                            "В репозитории ["+ model.getRepo()+ "]("+ model.getUrl()+")+" +
+                            model.getDate()+"\n\n");
                     break;
             }
         }
