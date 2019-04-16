@@ -28,7 +28,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
     public String getBotToken() {
-        return "710491839:AAEHZvDYMGxc_EZG3Uy1WeFKOYu3fEg7xuc";
+        return BotConfig.TOKEN;
     }
 
 

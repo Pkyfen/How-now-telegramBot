@@ -1,6 +1,8 @@
 src/main/resources/application.properties
-target
+src/main/java/BotConfig.java
 src/main/resources
+
+target
 ### IntelliJ IDEA ###
 .idea
 *.iws
