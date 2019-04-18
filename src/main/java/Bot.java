@@ -6,7 +6,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -98,7 +97,7 @@ public class Bot extends TelegramLongPollingBot {
                 case "/start":
                     Data.InputInFile("src/main/resources/allUsers.txt", String.valueOf(message.getChatId()));
                     sendMsg(message, "Привет мир!\n" +
-                            "Вы можете узнать последние действия пользователя в GitHub!" +
+                            "Вы можете узнать последние действия пользователя в GetLastUpdates!" +
                             "\nПросто введите его логин" +
                             "\n version: 0.0.4");
                     break;
@@ -110,7 +109,7 @@ public class Bot extends TelegramLongPollingBot {
                 default:
                     try{
                         System.out.printf(message.getChat().getFirstName() + " " + message.getChat().getLastName()+ " => ");
-                        sendMsg(message, GitHub.getUpdates(message.getText(), model));
+                        sendMsg(message, GetLastUpdates.getUpdates(message.getText(), model));
                     } catch (IOException | ParseException e) {
                         sendMsg(message,"не смог найти такого пользователя");
                     }

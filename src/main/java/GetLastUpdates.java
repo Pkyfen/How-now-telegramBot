@@ -1,3 +1,4 @@
+import org.glassfish.grizzly.streams.Input;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -8,7 +9,9 @@ import java.text.ParseException;
 import java.util.Map;
 import java.util.Scanner;
 
-public class GitHub {
+public class GetLastUpdates {
+    private String answer = "*Пользователь \"+acc+\"*\\n\\n";
+    private String result = "";
     public static String getUpdates(String acc, GitModel model) throws IOException, ParseException {
         String answer="*Пользователь "+acc+"*\n\n";
         String result="";
@@ -116,4 +119,24 @@ public class GitHub {
                         "IssueCommentEvent","Отправил ишью");
         return type.get(engType);
     }
+
+    private static String getInformationFromUrl(URL url) throws IOException {
+        String info = "";
+        Scanner scan = new Scanner((InputStream) url.getContent());
+        while(scan.hasNext()){
+            info  += scan.nextLine();
+        }
+        return info;
+    }
+
+//    private void setUpdates(JSONArray array, GitModel gitModel, int numberOfUpdates){
+//        JSONObject object = array.getJSONObject(numberOfUpdates);
+//        JSONObject repo = object.getJSONObject("repo");
+//        JSONObject actor = object.getJSONObject("actor");
+//
+//        model.setType(object.getString("type"));
+//        model.setUrl(getHttpUrl(repo.getString("url")));
+//        model.setRepo(repo.getString("name"));
+//        model.setLogin(actor.getString("login"));
+//    }
 }
