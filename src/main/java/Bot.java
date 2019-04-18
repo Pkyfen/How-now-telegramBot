@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -22,13 +23,13 @@ public class Bot extends TelegramLongPollingBot {
 
 
     public String getBotUsername() {
-        return "githuby_bot";
+        return "githuby_bot_test";
     }
 
 
 
     public String getBotToken() {
-        return BotConfig.TOKEN;
+        return BotConfig.TOKEN_TEST;
     }
 
 
@@ -60,7 +61,10 @@ public class Bot extends TelegramLongPollingBot {
         keyboardFirstRow.add(new KeyboardButton("podkovyrovda"));
         keyboardFirstRow.add(new KeyboardButton("pkyfen"));
 
+        KeyboardRow keyboardSecondRow = new KeyboardRow();
+        keyboardSecondRow.add(new KeyboardButton("/start"));
         keyboardRows.add(keyboardFirstRow);
+        keyboardRows.add(keyboardSecondRow);
         keyboardMarkup.setKeyboard(keyboardRows);
     }
 
@@ -74,7 +78,7 @@ public class Bot extends TelegramLongPollingBot {
             try {
                 execute(update);
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                System.out.println("пользователь " + id + " заблокировал бота");
             }
         }
     }

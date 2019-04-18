@@ -25,7 +25,8 @@
                 <version>2.0.8</version>
                 <configuration>
                     <processTypes>
-                        <app>java $JAVA_OPTS -cp target/classes:target/dependency/* Bot</app>
+                        <appName>frozen-oasis-60640</appName>
+                        <app>java $JAVA_OPTS -cp target/classes:target/dependency/* Run</app>
                     </processTypes>
                 </configuration>
 

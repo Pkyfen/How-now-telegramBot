@@ -1,20 +1,20 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Data {
-    public static void InputInFile(String fileName, String id){
-        try {
-            FileWriter writer = new FileWriter(fileName);
-            writer.write(id + "\n");
-            writer.flush();
-            System.out.println("Новый пользователь " + id);
+    public static void InputInFile(String fileName, String id) {
+        ArrayList<String> usersId = ReadId(fileName);
+        if (!usersId.contains(id)) {
+            try {
+                FileWriter writer = new FileWriter(fileName, true);
+                writer.append(id).append("\n");
+                writer.flush();
+                System.out.println("Новый пользователь " + id);
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

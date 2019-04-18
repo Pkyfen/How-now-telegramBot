@@ -32,8 +32,18 @@ public class GitHub {
             model.setLogin(actor.getString("login"));
             try{
                 JSONArray commits = object.getJSONObject("payload").getJSONArray("commits");
-                JSONObject message = commits.getJSONObject(0);
-                model.setCommit(message.getString("message"));
+                String commit = "";
+                for(int k = 0; k < commits.length(); k++) {
+                    JSONObject message = commits.getJSONObject(k);
+                    if(message.getBoolean("distinct")) {
+                        if(commits.length()>1 && k+1!=commits.length()) {
+                            commit +=  message.getString("message")+",\n";
+                        }else{
+                            commit += message.getString("message");
+                        }
+                    }
+                }
+                model.setCommit(commit);
             }
             catch (Exception e){
                 model.setCommit("null");
@@ -45,7 +55,7 @@ public class GitHub {
                 case "PushEvent":
                     answer+=("_"+(i+1)+") "+
                             rusType(model.getType())+ "_\n    "+
-                            "Текст: \"" + model.getCommit()+"\"\n    "+
+                            "Изменения: " + model.getCommit()+"\n    " +
                             "В репозитории ["+ model.getRepo()+ "]("+ model.getUrl()+")\n    "+
                             model.getDate() + "\n\n");
                             break;
@@ -73,7 +83,7 @@ public class GitHub {
 
                     default:answer+=("_"+(i+1)+") "+
                             "Действие " + model.getType()+ "_\n    "+
-                            "В репозитории ["+ model.getRepo()+ "]("+ model.getUrl()+")+" +
+                            "В репозитории ["+ model.getRepo()+ "]("+ model.getUrl()+")" +"\n"+
                             model.getDate()+"\n\n");
                     break;
             }
